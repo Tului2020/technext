@@ -2,6 +2,10 @@
   "name": "query-app",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "npm": "9.8.0",
+    "node": "16.20.1"
+  },
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
