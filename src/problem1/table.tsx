@@ -58,28 +58,27 @@ export default function ResultTable({ data }: Props) {
                   style={{ padding: '0px 50px' }}
                   key={colName}
                 >
-                  <div style={{ display: 'flex' }}>
-                    <div
-                      onClick={() => setOrder((_order) => ({ state: _order.filterName === colName ? !_order.state : true, filterName: colName }))}
-                    >
-                      {filterable.includes(colName) && (
-                        (order.filterName === colName) ? (
-                          order.state ? (
-                            <ArrowDropUpIcon
-                              style={{ color: '#848cff' }}
-                            />
-                          ) : (
-                            <ArrowDropDownIcon
-                              style={{ color: '#848cff' }}
-                            />
-                          )
+                  <div
+                    style={{ display: 'flex', cursor: filterable.includes(colName) ? 'pointer' : 'auto' }}
+                    onClick={() => filterable.includes(colName) && setOrder((_order) => ({ state: _order.filterName === colName ? !_order.state : true, filterName: colName }))}
+                  >
+                    {filterable.includes(colName) && (
+                      (order.filterName === colName) ? (
+                        order.state ? (
+                          <ArrowDropUpIcon
+                            style={{ color: '#848cff' }}
+                          />
                         ) : (
                           <ArrowDropDownIcon
-                            style={{ color: 'grey' }}
+                            style={{ color: '#848cff' }}
                           />
                         )
-                      )}
-                    </div>
+                      ) : (
+                        <ArrowDropDownIcon
+                          style={{ color: 'grey' }}
+                        />
+                      )
+                    )}
                     {colName}
                   </div>
                 </TableCell>
@@ -98,7 +97,7 @@ export default function ResultTable({ data }: Props) {
                     scope={idx > 0 ? 'row' : undefined}
                     key={_data.id + colName}
                   >
-                    {(_data as any)[colName]}
+                    {(_data as any)[colName].length > 300 ? (_data as any)[colName].slice(0, 296) + '...' : (_data as any)[colName]}
                   </TableCell>
                 ))}
               </TableRow>
