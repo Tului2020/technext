@@ -19,7 +19,7 @@ interface QueryResult {
   phase: string;
 }
 
-const items: Item[] = ['id', 'phase', 'date', 'text'];
+const items: Item[] = ['id', 'phase', 'text', 'date'];
 const filterable: Item[] = ['id', 'phase', 'date'];
 interface Props {
   data: QueryResult[];
@@ -32,7 +32,7 @@ type Filter = {
 
 export default function ResultTable({ data }: Props) {
   const [page, setPage] = useState(0);
-  const [order, setOrder] = useState<Filter>({ filterName: undefined, state: true });
+  const [order, setOrder] = useState<Filter>({ filterName: 'id', state: true });
   const [rows, setRows] = useState(10);
 
   const orderedList: QueryResult[] = data.sort((a, b) => {
@@ -63,7 +63,7 @@ export default function ResultTable({ data }: Props) {
                     onClick={() => filterable.includes(colName) && setOrder((_order) => ({ state: _order.filterName === colName ? !_order.state : true, filterName: colName }))}
                   >
                     {filterable.includes(colName) && (
-                      (order.filterName === colName) ? (
+                      ((data.length) && (order.filterName === colName)) ? (
                         order.state ? (
                           <ArrowDropUpIcon
                             style={{ color: '#848cff' }}

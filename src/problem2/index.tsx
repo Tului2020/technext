@@ -19,8 +19,7 @@ const ProblemTwo = (props: Props) => {
       .then((_data: any[]) => {
         setLabels(_data.map(({ phase }) => phase || 'NA'));
         setData(_data.map(({ entries }) => entries || 0));
-      })
-
+      });
   }, []);
 
   return (
