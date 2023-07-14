@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import { ApexOptions } from 'apexcharts';
 import Chart from 'react-apexcharts';
 
@@ -62,12 +61,10 @@ const SuperImposedChart = (props: Props) => {
         options={options}
         series={series}
         type='bar'
-        width='500'
+        width='800'
       />
     </div>
   );
 };
 
-export default styled(SuperImposedChart)`
-
-`;
+export default SuperImposedChart;
