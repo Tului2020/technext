@@ -9,13 +9,14 @@ import { useState } from 'react';
 import { TablePagination } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import RowDialog from './dialog';
 
 type Item = 'id' | 'phase' | 'date' | 'text';
 
 interface QueryResult {
   id: number;
   text: string;
-  date: Date;
+  date: string;
   phase: string;
 }
 
@@ -34,6 +35,7 @@ export default function ResultTable({ data }: Props) {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState<Filter>({ filterName: 'id', state: true });
   const [rows, setRows] = useState(10);
+  const [popupId, setPopupId] = useState<undefined | number>(undefined)
 
   const orderedList: QueryResult[] = data.sort((a, b) => {
     if (order.filterName === 'id') {
@@ -88,8 +90,13 @@ export default function ResultTable({ data }: Props) {
           <TableBody>
             {orderedList.slice(page * rows, (page + 1) * rows).map((_data, idx) => (
               <TableRow
+                onClick={() => setPopupId(_data.id)}
                 key={idx}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                hover
+                style={{
+                  cursor: 'pointer'
+                }}
               >
                 {items.map((colName, idx) => (
                   <TableCell
@@ -116,6 +123,12 @@ export default function ResultTable({ data }: Props) {
       />
       {data.length === 0 && (
         <div>No Info</div>
+      )}
+      {popupId && (
+        <RowDialog
+          data={data.filter(({ id }) => id === popupId)[0]}
+          onCloseDialog={() => setPopupId(undefined)}
+        />
       )}
     </>
   );
