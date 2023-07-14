@@ -5,8 +5,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
+import { useState } from 'react';
+import { TablePagination } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 
@@ -31,8 +31,9 @@ type Filter = {
 }
 
 export default function ResultTable({ data }: Props) {
-  const [count, setCount] = useState(10);
+  const [page, setPage] = useState(0);
   const [order, setOrder] = useState<Filter>({ filterName: undefined, state: true });
+  const [rows, setRows] = useState(10);
 
   const orderedList: QueryResult[] = data.sort((a, b) => {
     if (order.filterName === 'id') {
@@ -44,15 +45,6 @@ export default function ResultTable({ data }: Props) {
     }
     return 0;
   });
-
-  useEffect(() => {
-    console.log(data);
-    debugger;
-  }, [data]);
-
-  useEffect(() => {
-    setCount(10);
-  }, [data]);
 
   return (
     <>
@@ -95,7 +87,7 @@ export default function ResultTable({ data }: Props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orderedList.slice(0, count).map((_data, idx) => (
+            {orderedList.slice(page * rows, (page + 1) * rows).map((_data, idx) => (
               <TableRow
                 key={idx}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -115,13 +107,14 @@ export default function ResultTable({ data }: Props) {
         </Table>
       </TableContainer>
       {/* Text and Button */}
-      {count < data.length && (
-        <Button
-          onClick={() => setCount(_count => _count + 10)}
-        >
-          Load More
-        </Button>
-      )}
+      <TablePagination
+        component='div'
+        count={data.length}
+        page={page}
+        onPageChange={(e, _page) => setPage(_page)}
+        rowsPerPage={rows}
+        onRowsPerPageChange={(e) => setRows(+e.target.value)}
+      />
       {data.length === 0 && (
         <div>No Info</div>
       )}
