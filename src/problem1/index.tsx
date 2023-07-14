@@ -2,9 +2,21 @@ import { useState } from 'react';
 import { Button, CircularProgress, Grid, TextField } from '@mui/material';
 import ResultTable from './table';
 
+interface QueryResult {
+  id: number;
+  text: string;
+  date: Date;
+  phase: string;
+}
+
+const trimString = (str: string) => {
+  if (str.startsWith("('")) str = str.slice(2);
+  if (str.endsWith("',)")) str = str.slice(0, -3);
+  return str;
+}
 
 const ProblemOne = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<QueryResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchPhrase, setSearchPhrase] = useState('laser');
 
@@ -13,7 +25,9 @@ const ProblemOne = () => {
       setLoading(true);
       fetch('https://testtechnext1-pearl118.b4a.run/search/api/query/?query=' + searchPhrase)
         .then(res => res.json())
-        .then((res: any) => setData(res))
+        .then((res: QueryResult[]) => {
+          setData(res.map((_data) => ({ ..._data, text: trimString(_data.text), phase: trimString(_data.phase) })));
+        })
         .catch((err) => console.error(err))
         .finally(() => setLoading(false));
     }
@@ -48,7 +62,7 @@ const ProblemOne = () => {
 
       <Grid xs={12} item>
         <ResultTable
-          data={data}
+          data={data as any}
         />
       </Grid>
 
