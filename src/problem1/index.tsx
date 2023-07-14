@@ -10,8 +10,8 @@ interface QueryResult {
 }
 
 const trimString = (str: string) => {
-  if (str.startsWith("('")) str = str.slice(2);
-  if (str.endsWith("',)")) str = str.slice(0, -3);
+  if (str.startsWith("('") || str.startsWith('("')) str = str.slice(2);
+  if (str.endsWith("',)") || str.endsWith('",)')) str = str.slice(0, -3);
   return str;
 }
 
